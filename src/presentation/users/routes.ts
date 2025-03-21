@@ -1,38 +1,30 @@
 import { Router } from "express";
+import { UserController } from "./controller";
 
 export class UserRoutes {
-    static getRoutes(): Router {
-        const router = Router();
-        router.get("/", (req, res) => {
-            res.status(200).json({"message": "Hello World"});	
-        });
 
-        router.post("/api/users/register", (req, res) => {
-            res.status(200).json({"message": "Hello World"});	
-        });
+  constructor(
+    private readonly controller: UserController) {}
 
-        router.post("/api/users/login", (req, res) => {
-            res.status(501).json({mesagge:"No yet implemented"});	
-        });
+    get routes(): Router {
+    const router = Router();
 
-        router.get("/api/users", (req, res) => {
-            res.status(200).json({"message": "Hello World"});	
-        });
+    //router.post("/", (req: Request, res: Response) => {
+    //  res.status(501).json({ message: "conected" });
+    //});
 
-        router.get("/api/users/:id", (req, res) => {
-            res.status(200).json({"message": "Hello World"});	
-        });
+    router.post("/register", this.controller.create);
 
-        router.patch("/api/users/:id", (req, res) => {
-            res.status(200).json({"message": "Hello World"});	
-        });
-        
-        router.delete("/api/users/:id", (req, res) => {
-            res.status(200).json({"message": "Hello World"});	
-        });
-        
-        
-        
-        return Router();
-    }
+    router.post("/login", this.controller.Login);
+
+    router.get("/", this.controller.FindAll);
+
+    router.get("/:id", this.controller.FindOne);
+
+    router.patch("/:id", this.controller.update);
+
+    router.delete("/:id", this.controller.delete);
+
+    return router;
+  }
 }

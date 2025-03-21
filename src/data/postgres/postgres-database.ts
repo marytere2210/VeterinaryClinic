@@ -20,11 +20,11 @@ export class PostgresDatabase {
   constructor(options: Options){
     this.datasource = new DataSource({
         type: "postgres",
-        host: options.host,
+        host: options.host, 
         port: options.port,
         username: options.username,
         password: options.password,
-        database: options.database,
+        database: options.database, 
         synchronize: true,
         entities: [Petpost, TypeUsers],
         ssl:{

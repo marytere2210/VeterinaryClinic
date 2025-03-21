@@ -1,19 +1,18 @@
-export class CreatePostDto {
+export class CreatePetPostDto {
     constructor(
-        public pet_name: string,
-        public description: string,
-        public image_url?: string
+      public readonly pet_name: string,
+      public readonly description: string,
+      public readonly image_url: string
     ) {}
-
-    static execute(object: { [key: string]: any }): [string?, CreatePostDto?] {
-        const { pet_name, description, image_url } = object;
-
-        if (!pet_name) return ["Pet name is required"];
-        const petRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (petRegex.test(pet_name)) return ["nombre is invalid"];
-        if (!description) return ["Description is required"];
-        if(!image_url) return ["Image is required"];
-        
-        return [undefined, new CreatePostDto(pet_name, description, image_url)];
+  
+    static execute(object: { [key: string]: any }): [string?, CreatePetPostDto?] {
+      const { pet_name, description, image_url } = object;
+  
+      if (!pet_name) return ["Falta el nombre de la mascota"];
+      if (!description) return ["Falta la descripción"];
+      if (!image_url) return ["Falta la url de la imagen"];
+  
+      return [undefined, new CreatePetPostDto(pet_name, description, image_url)];
     }
-}
+  }
+  

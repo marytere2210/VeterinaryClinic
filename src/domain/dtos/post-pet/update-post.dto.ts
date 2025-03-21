@@ -9,8 +9,6 @@ export class UpdatePetDto {
         const { pet_name, description, image_url } = object;
 
         if (pet_name === pet_name) return ["Name is the same"];    
-        const petRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (pet_name && !petRegex.test(pet_name)) return ["Name is invalid"];
         if (!description) return ["Description is required"];
         return [undefined, new UpdatePetDto(pet_name, description, image_url)];
     }

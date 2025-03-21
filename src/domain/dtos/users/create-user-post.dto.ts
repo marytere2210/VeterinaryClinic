@@ -2,7 +2,7 @@ export class RegisterUserDto {
     constructor(
         public name: string,
         public email: string,
-        public password: string
+        public password: string,
     ) {}
 
     static execute(object: { [key: string]: any }): [string?, RegisterUserDto?] {
@@ -19,6 +19,9 @@ export class RegisterUserDto {
         
         const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; // Example regex for password validation
         if (!passwordRegex.test(password)) return ["Password is invalid"];
+
+        if(!object.rol) return ["Rol is required"];
+
         
         return [undefined, new RegisterUserDto(name, email, password)];
     }
