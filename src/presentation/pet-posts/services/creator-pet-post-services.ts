@@ -1,24 +1,24 @@
-import { Petpost } from "../../../data/postgres/models/pet-post-model";
+import { Petpost } from "../../../data";
+import { CustomError } from "../../../domain";
 import { CreatePetPostDto } from "../../../domain/dtos/post-pet/create-post.dto";
 
-export class CreatePetPostService {
-  constructor() {}
-
-  async execute(createPetPostDto: CreatePetPostDto): Promise<Petpost> {
-    const { pet_name, description, image_url } = createPetPostDto;
+export class RegisterPetPost{
+  async execute(petData: any){
+    const pet = new Petpost();
+    
+    pet.pet_name = petData.pet_name;
+    pet.description = petData.description;
+    pet.image_url = petData.image_url;
 
     try {
-      const petPost = new Petpost();
-      petPost.pet_name = pet_name;
-      petPost.description = description;
-      petPost.image_url = image_url;
-
-      await petPost.save();
-
-      return petPost;
+      await pet.save();
+      return {
+        message: 'Pet created successfully'
+      };
     } catch (error) {
-      console.error(error);
-      throw new Error("Error al crear la publicación de la mascota");
+      throw CustomError.internalServer('error creating pet');
     }
   }
 }
+
+

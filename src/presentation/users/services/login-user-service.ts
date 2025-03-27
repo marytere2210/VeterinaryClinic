@@ -1,5 +1,5 @@
-export class LoginUsers{
+export class LoginUsersService{
     async execute(){
-        return {mesagge: "No yet implemented"}
+      return 'No definido'
     }
-}
+  }

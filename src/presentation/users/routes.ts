@@ -1,30 +1,45 @@
 import { Router } from "express";
-import { UserController } from "./controller";
+import { RegisterUsersService } from "./services/register-user-service";
+import { LoginUsersService } from "./services/login-user-service";
+import { FinderUsersService } from "./services/finder-users-service";
+import { FinderUserService } from "./services/finder-user-service";
+import { UpdateUsersService } from "./services/updater-user-service";
+import { DeleteUsersService } from "./services/eliminator-user-service";
+import { ControllerUser } from "./controller";
+
 
 export class UserRoutes {
-
-  constructor(
-    private readonly controller: UserController) {}
-
-    get routes(): Router {
+  static get routes(): Router{
     const router = Router();
 
-    //router.post("/", (req: Request, res: Response) => {
-    //  res.status(501).json({ message: "conected" });
-    //});
+    const registerUsersService = new RegisterUsersService();
+    const loginUsersService = new LoginUsersService();
+    const finderUsersService = new FinderUsersService(); 
+    const finderUserService = new FinderUserService();
+    const updateUsersService = new UpdateUsersService();
+    const deleteUsersService = new DeleteUsersService();
 
-    router.post("/register", this.controller.create);
+    const controller = new ControllerUser(
+    registerUsersService,
+    loginUsersService,
+    finderUsersService,
+    finderUserService,
+    updateUsersService,
+    deleteUsersService
+    );
 
-    router.post("/login", this.controller.Login);
+    router.post("/register", controller.create.bind(controller));
 
-    router.get("/", this.controller.FindAll);
+    router.post("/login",controller.login);
 
-    router.get("/:id", this.controller.FindOne);
+    router.get("/",controller.findAll);
 
-    router.patch("/:id", this.controller.update);
+    router.get("/:id",controller.findOne);
 
-    router.delete("/:id", this.controller.delete);
+    router.patch("/:id",controller.update);
+
+    router.delete("/:id",controller.delete);
 
     return router;
   }
-}
+  }

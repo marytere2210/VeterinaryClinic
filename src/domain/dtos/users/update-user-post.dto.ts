@@ -7,7 +7,9 @@ export class UpdateUserDto {
 
     static execute(object: { [key: string]: any }): [string?, UpdateUserDto?] {
         const { name, email, password } = object;
-
+        if (!name) return ["Name is required"];
+        if (name === name) return ["Name is the same"];
+        if (!email) return ["Email is required"];
         if (email && !email.includes("@")) return ["Email is invalid"];
         if (email === email) return ["Email is the same"];    
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

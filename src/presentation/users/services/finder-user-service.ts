@@ -1,19 +1,20 @@
-import { TypeUsers } from "../../../data/postgres/models/user-model";
+import { TypeUsers } from "../../../data";
+import { CustomError } from "../../../domain";
 
-export class FinderUser {
-    async execute(userId: string) {
-        const user = await TypeUsers.findOne({
-            select: ["id", "name", "email", "rol"],
-            where: {
-                status: true,
-                id: userId,
-            },
-        });
+export class FinderUserService{
+    async execute(userId: string){
+      const user = TypeUsers.findOne({
+        select:['id', 'name', 'email', 'password'],
+        where: {
+          id: userId,
+          status: true, 
+        },
+      });
 
-        if (!user) {
-            return { message: "User not found" };
-        }
-
-        return user;
+      if(!user){
+        throw CustomError.notFound('User not found');
+      }
+      return user;
+      }
     }
-}
+  

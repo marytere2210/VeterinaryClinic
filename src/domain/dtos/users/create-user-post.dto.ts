@@ -17,11 +17,8 @@ export class RegisterUserDto {
         
         if (!password) return ["Password is required"];
         
-        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; // Example regex for password validation
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; 
         if (!passwordRegex.test(password)) return ["Password is invalid"];
-
-        if(!object.rol) return ["Rol is required"];
-
         
         return [undefined, new RegisterUserDto(name, email, password)];
     }
