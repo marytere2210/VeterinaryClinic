@@ -1,9 +1,7 @@
 import { DataSource } from "typeorm"
 import { Petpost } from "./models/pet-post-model"
 import { TypeUsers } from "./models/user-model"
-/**
- * Option para la clase PostgresDatabase
-  */
+
 interface Options {
     host: string;
     port: number;
@@ -11,9 +9,7 @@ interface Options {
     password: string;
     database: string;
 }
-/**
- * Clase que se encarga de la conexión a la base de datos Postgres
- */
+
 export class PostgresDatabase {
   public datasource: DataSource;
   
@@ -33,9 +29,7 @@ export class PostgresDatabase {
         })
 
 }
-/**
- * Método que se encarga de la conexión a la base de datos
- */
+
 async connect(){
     try{
         await this.datasource.initialize()

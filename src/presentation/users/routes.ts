@@ -1,30 +1,48 @@
 import { Router } from "express";
-import { UserController } from "./controller";
+import { RegisterUsersService } from "./services/register-user-service";
+import { LoginUsersService } from "./services/login-user-service";
+import { FinderUsersService } from "./services/finder-users-service";
+import { FinderUserService } from "./services/finder-user-service";
+import { UpdateUsersService } from "./services/updater-user-service";
+import { DeleteUsersService } from "./services/eliminator-user-service";
+import { ControllerUser } from "./controller";
+
 
 export class UserRoutes {
-
-  constructor(
-    private readonly controller: UserController) {}
-
-    get routes(): Router {
+  static get routes(): Router{
     const router = Router();
 
-    //router.post("/", (req: Request, res: Response) => {
-    //  res.status(501).json({ message: "conected" });
-    //});
+    const registerUsersService = new RegisterUsersService();
+    const loginUsersService = new LoginUsersService();
+    const finderUsersService = new FinderUsersService(); 
+    const finderUserService = new FinderUserService();
+    const updateUsersService = new UpdateUsersService();
+    const deleteUsersService = new DeleteUsersService();
 
-    router.post("/register", this.controller.create);
+    
 
-    router.post("/login", this.controller.Login);
+    const controller = new ControllerUser(
+    registerUsersService,
+    loginUsersService,
+    finderUsersService,
+    finderUserService,
+    updateUsersService,
+    deleteUsersService,
+    loginUsersService
+    );
 
-    router.get("/", this.controller.FindAll);
+    router.post("/register", controller.create.bind(controller));
 
-    router.get("/:id", this.controller.FindOne);
+    router.post("/login",controller.login);
 
-    router.patch("/:id", this.controller.update);
+    router.get("/",controller.findAll);
 
-    router.delete("/:id", this.controller.delete);
+    router.get("/:id",controller.findOne);
+
+    router.patch("/:id",controller.update);
+
+    router.delete("/:id",controller.delete);
 
     return router;
   }
-}
+  }

@@ -9,6 +9,8 @@ export const envs = {
   DATABASENAME: get("DATABASENAME").required().asString(),
   DATABASEHOST: get("DATABASEHOST").required().asString(),
   DATABASEPORT: get("DATABASEPORT").required().asPortNumber(),
+  SECRETKEYJWT: get("SECRETKEY_JWT").required().asString(),
+  EXPIREINJWT: get("EXPIRE_IN_JWT").required().asString(), 
 
 }; 
 console.log(`PORT final:, ${envs.PORT}`);

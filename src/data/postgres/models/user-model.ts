@@ -1,7 +1,3 @@
-/**
- * se crea el modelo de la tabla user-model
- */
-
 import { BaseEntity, PrimaryGeneratedColumn, CreateDateColumn, Column, Entity } from "typeorm";
 
 export enum RoleUser{
@@ -9,9 +5,6 @@ export enum RoleUser{
     USER= "user",
 }
 
-/**
- * Clase que define el modelo de la tabla user
- */
 @Entity()
 export class TypeUsers extends BaseEntity{
     @PrimaryGeneratedColumn("uuid")

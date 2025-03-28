@@ -1,24 +1,30 @@
-import { TypeUsers } from "../../../data/postgres/models/user-model";
-import { RegisterUserDto } from "../../../domain/dtos/users/create-user-post.dto";
+import { encriptAdapter } from "../../../config";
+import { TypeUsers } from "../../../data";
+import { CustomError, RegisterUserDto } from "../../../domain";
 
-export class RegisterUsers {
-  constructor() {}
 
-  async execute(registerUserDto: RegisterUserDto): Promise<TypeUsers> {
-    const { name, email, password } = registerUserDto;
+export class RegisterUsersService{
+  async execute(userData: RegisterUserDto){
+    const user = new TypeUsers();
+      
+      user.name = userData.name;
+      user.email = userData.email;
+      user.password = this.encriptPassword(userData.password);
+      
 
     try {
-      const user = new TypeUsers();
-      user.name = name;
-      user.email = email;
-      user.password = password; // Consider hashing the password here
-
       await user.save();
+      return {
+        message: 'User created successfully'
+      }
 
-      return user;
+      
     } catch (error) {
-      console.error(error);
-      throw new Error("Error al crear el usuario");
+      throw CustomError.internalServer('error creating user')
     }
   }
+
+ private encriptPassword(password: string): string {
+  return encriptAdapter.hash(password);
+ }
 }
