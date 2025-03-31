@@ -11,6 +11,9 @@ export const envs = {
   DATABASEPORT: get("DATABASEPORT").required().asPortNumber(),
   SECRETKEYJWT: get("SECRETKEY_JWT").required().asString(),
   EXPIREINJWT: get("EXPIRE_IN_JWT").required().asString(), 
-
+  MAILER_SERVICE:get( "MAILER_SERVICE").required().asString(),
+  MAILER_EMAIL:get("MAILER_EMAIL").required().asString(),
+  MAILER_SECRET_KEY:get("MAILER_SECRET_KEY").required().asString(),
+  WEBSERVICE_URL:get("WEBSERVICE_URL").required().asString(),
 }; 
 console.log(`PORT final:, ${envs.PORT}`);

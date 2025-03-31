@@ -1,23 +1,23 @@
-import { CustomError, LoginUserdto, RegisterUserDto } from "../../domain";
 import { DeleteUsersService } from "./services/eliminator-user-service";
-import { FinderUserService } from "./services/finder-user-service";
-import { FinderUsersService } from "./services/finder-users-service";
-import { LoginUsersService } from "./services/login-user-service";
-import { RegisterUsersService } from "./services/register-user-service";
-import { UpdateUsersService } from "./services/updater-user-service";
+import { RegisterUserDto } from "../../domain/dtos/users/create-user-post.dto";
 import { Request, Response } from "express";
+import { CustomError, LoginUserdto } from "../../domain";
+import { RegisterUsersService } from "./services/register-user-service";
+import { LoginUsersService } from "./services/login-user-service";
+import { FinderUserService } from "./services/finder-user-service";
+import { UpdateUsersService } from "./services/updater-user-service";
+import { FinderUsersService } from "./services/finder-users-service";
 
 
 export class ControllerUser {
   constructor(
-    private readonly registerUsersService: RegisterUsersService,
-    private readonly loginUsersService: LoginUsersService,
-    private readonly finderUsersService: FinderUsersService,
-    private readonly finderUserService: FinderUserService,
-    private readonly updateUsersService: UpdateUsersService,
-    private readonly deleteUsersService: DeleteUsersService,
-    private readonly LoginUsersService: LoginUsersService
-  ){}
+    private readonly registerUser: RegisterUsersService,
+    private readonly finderUsers: FinderUsersService,
+    private readonly finderUser: FinderUserService,
+    private readonly updateUser: UpdateUsersService,
+    private readonly deleteUser: DeleteUsersService,
+    private readonly login: LoginUsersService
+  ) {}
 
   private handleError = (error: unknown, res: Response) => {
   if(error instanceof CustomError){
@@ -33,23 +33,24 @@ export class ControllerUser {
     if(error){
       return res.status(422).json({message: error})
         }
-    this.registerUsersService
+    this.registerUser
     .execute(registerUserDto!)
     .then((data) => res.status(201).json(data))
     .catch((error) => this.handleError(error, res))
   };
-  login = (req: Request, res: Response)=> {
-    const [error, loginUserdto] = LoginUserdto.execute(req.body);
-    if(error){
-      return res.status(422).json({message: error})
-        }
-    this.loginUsersService
-    .execute(loginUserdto!)
-    .then((data) => res.status(201).json(data))
-    .catch((error) => this.handleError(error, res))
+
+  Login = (req: Request, res: Response) => {
+    const [error, loginUserDto] = LoginUserdto.execute(req.body);
+    if (error) return res.status(422).json({ message: error });
+
+    this.login
+      .execute(loginUserDto!)
+      .then((msg) => res.status(200).json(msg))
+      .catch((error) => this.handleError(error, res));
   };
+
   findAll = (req: Request, res: Response)=> {
-    this.finderUsersService
+    this.finderUsers
     .execute()
     .then((data) => res.status(201).json(data))
     .catch((error) => this.handleError(error, res))
@@ -58,7 +59,7 @@ export class ControllerUser {
     
     const {id} = req.params;
     
-    this.finderUserService
+    this.finderUser
     .execute(id)
     .then((data) => res.status(201).json(data))
     .catch((error) => this.handleError(error, res))
@@ -69,7 +70,7 @@ export class ControllerUser {
     if(error){
       return res.status(422).json({message: error})
         }
-    this.updateUsersService
+    this.updateUser
     .execute(id, registerUserDto!)
     .then((data) => res.status(201).json(data))
     .catch((error) => this.handleError(error, res))
@@ -77,9 +78,16 @@ export class ControllerUser {
   delete = (req: Request, res: Response)=> {
     const {id} = req.params;
     
-    this.deleteUsersService
+    this.deleteUser
     .execute(id)
     .then((data) => res.status(204).json(data))
     .catch((error) => this.handleError(error, res))
   };
+
+  validate = (req: Request, res: Response)=> {
+    const {token} = req.params;
+    
+  } 
+
+
 }

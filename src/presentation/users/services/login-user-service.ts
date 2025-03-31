@@ -1,3 +1,4 @@
+
 import { TypeUsers } from "../../../data";
 import { CustomError } from "../../../domain";
 import { LoginUserdto } from "../../../domain/dtos/users/loginUserdto";
@@ -14,7 +15,7 @@ export class LoginUsersService{
       this.verifyPasswordIsCorrect(credential.password,user!.password);
 
       //3
-      const token = this.generateToken({id: user!.id}, envs.EXPIREINJWT);
+      const token = await this.generateToken({id: user!.id}, envs.EXPIREINJWT);
  
  //4 devolver token
       return {token, user:{
@@ -61,5 +62,3 @@ export class LoginUsersService{
  }
 
 }
-
-  

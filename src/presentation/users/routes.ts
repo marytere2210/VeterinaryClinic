@@ -1,4 +1,4 @@
-import { Router } from "express";
+
 import { RegisterUsersService } from "./services/register-user-service";
 import { LoginUsersService } from "./services/login-user-service";
 import { FinderUsersService } from "./services/finder-users-service";
@@ -6,6 +6,8 @@ import { FinderUserService } from "./services/finder-user-service";
 import { UpdateUsersService } from "./services/updater-user-service";
 import { DeleteUsersService } from "./services/eliminator-user-service";
 import { ControllerUser } from "./controller";
+import { Router } from "express";
+
 
 
 export class UserRoutes {
@@ -13,17 +15,14 @@ export class UserRoutes {
     const router = Router();
 
     const registerUsersService = new RegisterUsersService();
-    const loginUsersService = new LoginUsersService();
-    const finderUsersService = new FinderUsersService(); 
+   const finderUsersService = new FinderUsersService(); 
     const finderUserService = new FinderUserService();
     const updateUsersService = new UpdateUsersService();
     const deleteUsersService = new DeleteUsersService();
-
-    
+    const loginUsersService = new LoginUsersService();
 
     const controller = new ControllerUser(
     registerUsersService,
-    loginUsersService,
     finderUsersService,
     finderUserService,
     updateUsersService,
@@ -33,7 +32,7 @@ export class UserRoutes {
 
     router.post("/register", controller.create.bind(controller));
 
-    router.post("/login",controller.login);
+    router.post("/login",controller.Login);
 
     router.get("/",controller.findAll);
 
@@ -42,7 +41,11 @@ export class UserRoutes {
     router.patch("/:id",controller.update);
 
     router.delete("/:id",controller.delete);
-
+    
+    router.get("/validate:token", controller.validate);
+    
     return router;
   }
-  }
+ 
+}
+    
