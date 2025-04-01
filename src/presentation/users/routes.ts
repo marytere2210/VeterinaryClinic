@@ -7,14 +7,21 @@ import { UpdateUsersService } from "./services/updater-user-service";
 import { DeleteUsersService } from "./services/eliminator-user-service";
 import { ControllerUser } from "./controller";
 import { Router } from "express";
+import { EmailService } from "../common/services/email.services";
+import { envs } from "../../config";
 
 
 
 export class UserRoutes {
   static get routes(): Router{
     const router = Router();
-
-    const registerUsersService = new RegisterUsersService();
+    const emailService = new EmailService(
+      envs.MAILER_SERVICE,
+      envs.MAILER_EMAIL,
+      envs.MAILER_SECRET_KEY,
+      envs.SENDMAIL
+    );
+    const registerUsersService = new RegisterUsersService(emailService);
    const finderUsersService = new FinderUsersService(); 
     const finderUserService = new FinderUserService();
     const updateUsersService = new UpdateUsersService();

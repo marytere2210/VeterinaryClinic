@@ -86,8 +86,11 @@ export class ControllerUser {
 
   validate = (req: Request, res: Response)=> {
     const {token} = req.params;
+    this.registerUser
+    .validateEmail(token)
+    .then(()=> res.send("Email verified successfully"))
+    .catch((error) => this.handleError(error, res))
+  };
     
   } 
 
-
-}
