@@ -9,6 +9,9 @@ import { ControllerUser } from "./controller";
 import { Router } from "express";
 import { EmailService } from "../common/services/email.services";
 import { envs } from "../../config";
+import { AuthMiddlewers } from "../common/middlewers/auth.middlewers";
+
+
 
 
 
@@ -37,6 +40,8 @@ export class UserRoutes {
     loginUsersService
     );
 
+
+    router.use(AuthMiddlewers.protect);
     router.post("/register", controller.create.bind(controller));
 
     router.post("/login",controller.Login);
@@ -49,7 +54,7 @@ export class UserRoutes {
 
     router.delete("/:id",controller.delete);
     
-    router.get("/validate:token", controller.validate);
+    router.get("/validate/:token", controller.validate);
     
     return router;
   }

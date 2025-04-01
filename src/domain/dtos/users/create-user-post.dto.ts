@@ -11,7 +11,7 @@ export class RegisterUserDto {
         if (!name) return ["Name is required"];
         if (!email) return ["Email is required"];
         if (!email.includes("@")) return ["Email is invalid"];
-        
+       
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) return ["Email is invalid"];
         

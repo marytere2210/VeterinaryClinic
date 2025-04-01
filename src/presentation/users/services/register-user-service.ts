@@ -15,8 +15,10 @@ constructor(private readonly emailService : EmailService){}
       user.name = userData.name;
       user.email = userData.email;
       user.status = false;
-
       user.password = this.encriptPassword(userData.password);
+
+      const emailExists = await this.findeOneuserEmail(userData.email);
+if (emailExists) throw CustomError.badRequest('Email already exists');
      
     try {
       await user.save();
@@ -29,15 +31,10 @@ constructor(private readonly emailService : EmailService){}
       throw CustomError.internalServer('error creating user')
     }
   }
-
-  private findeOneuserEmail = async (email:string)=>{
-    const users = await TypeUsers.findOne({where: { email: email },
-    });
-    if(!users) throw CustomError.internalServer('Email not Registered');
+  private findeOneuserEmail = async (email: string) => {
+    const users = await TypeUsers.findOne({ where: { email: email } });
     return users;
-
-  };
-
+   };
   public validateEmail = async (token:string) =>{
     const payload = await JwtAdapter.verifyToken(token);
     if(!payload) throw CustomError.unAuthorized('Invalid token');
@@ -46,6 +43,7 @@ constructor(private readonly emailService : EmailService){}
     if(!email) throw CustomError.notFound('Invalid token');
 
     const user = await this.findeOneuserEmail(email);
+    if (!user) throw CustomError.notFound('User not found');
     user.status = true;
     try {
       await user.save(); 
