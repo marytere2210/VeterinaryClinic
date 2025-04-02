@@ -23,6 +23,7 @@ export class LoginUsersService{
   name:user?.name,
   email:user?.email,
   status:user?.status,
+  password : user?.password
   } 
  }
 }

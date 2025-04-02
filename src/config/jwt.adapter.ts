@@ -1,5 +1,6 @@
 import jwt  from "jsonwebtoken";
 import { envs } from "./envs";
+import { CustomError } from "../domain";
 
 export class JwtAdapter {
 
@@ -9,8 +10,8 @@ export class JwtAdapter {
         return new Promise((resolve) => 
             {
               jwt.sign(payload, envs.SECRETKEYJWT, {expiresIn: duration}, (error, token) =>{
-                console.log("JWT Secret Key:", envs.SECRETKEYJWT); // Verifica si es undefined
-                if(error) return resolve(null);
+            //    console.log("JWT Secret Key:", envs.SECRETKEYJWT); 
+                if(error) return CustomError.internalServer('Error generating token');
                 
                 resolve(token);
               });
@@ -18,10 +19,9 @@ export class JwtAdapter {
             })
     }
 
-    static async verifyToken(token: string){return new Promise((resolve) =>
-           {
-     jwt.verify(token, envs.SECRETKEYJWT, (error:any, decoded:any)=>
-              {
+    static async verifyToken(token: string){
+      return new Promise((resolve) => {
+     jwt.verify(token, envs.SECRETKEYJWT, (error:any, decoded:any)=>{
                if(error)
                 {    
                 console.log("error verificando token",error);

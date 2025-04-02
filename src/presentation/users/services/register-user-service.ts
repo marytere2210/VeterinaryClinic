@@ -47,14 +47,17 @@ if (emailExists) throw CustomError.badRequest('Email already exists');
     user.status = true;
     try {
       await user.save(); 
-      return "Email verified successfully"  
+      return {
+        message: 'User activated',
+      };
     } 
     catch (error) {
       throw CustomError.internalServer('Error saving user');
     }
     
   };
-private sendLinkValidateToken = async (email:string)=>{
+
+private sendLinkValidateToken = async (email: string) => {
   const token = await  JwtAdapter.generateToken({email}, "300s");
   console.log("Generated Token:", token);
   if(!token) throw CustomError.internalServer('Error generating token');
@@ -66,16 +69,15 @@ private sendLinkValidateToken = async (email:string)=>{
   <h1> Validate Your Email! </h1>
   <p>Click the link and verify your email</p>
   <a href="${link}">Validate your email ${email}</a>
- `
+ `;
  const isSent = await this.emailService.sendEmail({
   to: email,
   subject: 'Validate your email',
   html: html,
-})
-console.log("Email sent:", isSent);
+});
+
 if(!isSent) throw CustomError.internalServer('Error sending email');
 return true;
-
 };
 private encriptPassword(password: string): string {
   return encriptAdapter.hash(password);

@@ -7,6 +7,7 @@ import { LoginUsersService } from "./services/login-user-service";
 import { FinderUserService } from "./services/finder-user-service";
 import { UpdateUsersService } from "./services/updater-user-service";
 import { FinderUsersService } from "./services/finder-users-service";
+import { envs } from "../../config";
 
 
 export class ControllerUser {
@@ -35,8 +36,8 @@ export class ControllerUser {
         }
     this.registerUser
     .execute(registerUserDto!)
-    .then((data) => res.status(201).json(data))
-    .catch((error) => this.handleError(error, res))
+    .then((message) => res.status(201).json(message))
+      .catch((err) => this.handleError(err, res));
   };
 
   Login = (req: Request, res: Response) => {
@@ -45,7 +46,16 @@ export class ControllerUser {
 
     this.login
       .execute(loginUserDto!)
-      .then((msg) => res.status(200).json(msg))
+      .then((data) => {
+        res.cookie('token', data.token, {
+          httpOnly: true,
+          secure: envs.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: 3 * 60 * 60 * 1000,
+        });
+
+        return res.status(200).json({ user: data.user });
+      })
       .catch((error) => this.handleError(error, res));
   };
 
@@ -56,7 +66,6 @@ export class ControllerUser {
     .catch((error) => this.handleError(error, res))
   };
   findOne = (req: Request, res: Response)=> {
-    
     const {id} = req.params;
     
     this.finderUser
@@ -91,6 +100,7 @@ export class ControllerUser {
     .then(()=> res.send("Email verified successfully"))
     .catch((error) => this.handleError(error, res))
   };
-    
+
+  
   } 
 

@@ -7,6 +7,8 @@ import { Updatepetpostservice } from "./services/updater-pet-post-services";
 import { Deletepetpostservice } from "./services/eliminator-pet-post-services";
 import { Approvepetpostservice } from "./services/aproved-petpostservices";
 import { Rejectpetpostservice } from "./services/rejectpetpostservice";
+import { AuthMiddlewers } from "../common/middlewers/auth.middlewers";
+import { RoleUser } from "../../data";
 
 export class PetRoutes {
   static get routes(): Router{
@@ -32,10 +34,10 @@ export class PetRoutes {
     router.post("/",controller.create);
     router.get("/:id",controller.findOne);
     router.get("/",controller.findAll);
-    router.patch("/:id",controller.update);  
-    router.delete("/:id",controller.delete);  
-    router.patch("/:id/approve", controller.approve);
-    router.patch("/:id/reject",controller.reject);   
+    router.patch("/:id",AuthMiddlewers.restricTo(RoleUser.ADMIN),controller.update);  
+    router.delete("/:id",AuthMiddlewers.restricTo(RoleUser.ADMIN),controller.delete);  
+    router.patch("/:id/approve",AuthMiddlewers.restricTo(RoleUser.ADMIN), controller.approve);
+    router.patch("/:id/reject",AuthMiddlewers.restricTo(RoleUser.ADMIN),controller.reject);   
 
     return router;
   }

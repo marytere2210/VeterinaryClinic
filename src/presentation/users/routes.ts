@@ -10,6 +10,7 @@ import { Router } from "express";
 import { EmailService } from "../common/services/email.services";
 import { envs } from "../../config";
 import { AuthMiddlewers } from "../common/middlewers/auth.middlewers";
+import { RoleUser } from "../../data";
 
 
 
@@ -41,20 +42,24 @@ export class UserRoutes {
     );
 
 
-    router.use(AuthMiddlewers.protect);
+  
     router.post("/register", controller.create.bind(controller));
 
     router.post("/login",controller.Login);
 
-    router.get("/",controller.findAll);
+    router.get("/validate/:token", controller.validate);
+
+    router.use(AuthMiddlewers.protect);
+
+    router.get("/",AuthMiddlewers.restricTo(RoleUser.ADMIN),controller.findAll);
 
     router.get("/:id",controller.findOne);
 
     router.patch("/:id",controller.update);
 
-    router.delete("/:id",controller.delete);
+    router.delete("/:id",AuthMiddlewers.restricTo(RoleUser.ADMIN),controller.delete);
     
-    router.get("/validate/:token", controller.validate);
+    
     
     return router;
   }

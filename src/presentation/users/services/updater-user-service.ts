@@ -5,8 +5,8 @@ export class UpdateUsersService{
     async   execute(userId: string, userData: RegisterUserDto){
       const user = await this.ensureUserExists(userId);
       user.name = userData.name,
-      user.email = userData.email,
-      user.password = userData.password; 
+      user.email = userData.email;
+   
 
       try {
         await user.save();
