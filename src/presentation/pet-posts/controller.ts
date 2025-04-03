@@ -31,13 +31,11 @@ export class ControllPetpost{
   };
 
   create = (req: Request, res: Response) => {
-    const [error, createPetPostDto] = CreatePetPostDto.execute(req.body);
-    if(error){
-      return res.status(422).json({message: error})
-    }
+   const userId = req.body.sessionUser.id;
+
 
     this.registerPetPost
-    .execute(createPetPostDto!)
+    .execute(req.body, userId)
     .then((data) => res.status(201).json(data))
     .catch((error) => this.handleError(error, res));
   };

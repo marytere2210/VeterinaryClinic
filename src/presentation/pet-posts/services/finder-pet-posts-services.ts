@@ -1,4 +1,4 @@
-import { Petpost } from "../../../data";
+/**import { Petpost } from "../../../data";
 import { CustomError } from "../../../domain";
 
 export class FinderpetspostService{
@@ -12,4 +12,26 @@ export class FinderpetspostService{
             
         }
     }
+}*/
+
+import { Petpost, PetPostStatus } from "../../../data"
+
+export class FinderpetspostService{
+   async execute(){
+
+    const petpost = await Petpost.find({
+        relations: { user: true },
+        where: { status: PetPostStatus.APPROVED },
+       select: {
+           user: {
+               id: true,
+               name: true,
+               email: true,
+           }
+           
+        },
+        
+    });
+        return petpost;
+   }
 }

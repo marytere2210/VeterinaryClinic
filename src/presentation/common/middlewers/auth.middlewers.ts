@@ -23,6 +23,7 @@ export class AuthMiddlewers{
                     },
                 });
                 if (!user) return res.status(401).json({ message: 'Invalid token.' });
+                console.log(user)
               req.body.sessionUser = user;
                 next();
 
